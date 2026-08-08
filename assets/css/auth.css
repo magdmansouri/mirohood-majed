@@ -1,0 +1,81 @@
+/* assets/css/auth.css - Premium shared auth styles */
+.auth-bg {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background: #0a0908;
+    overflow: hidden;
+}
+.auth-bg::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(ellipse at 30% 20%, rgba(200,168,98,0.04), transparent 50%),
+                radial-gradient(ellipse at 70% 80%, rgba(200,168,98,0.02), transparent 50%);
+    animation: authGradient 20s ease-in-out infinite;
+}
+.auth-bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c8a862' fill-opacity='0.015'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    opacity: 0.6;
+}
+@keyframes authGradient {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    50% { transform: translate(-2%, 2%) rotate(2deg); }
+}
+body.auth-page {
+    position: relative;
+    z-index: 1;
+}
+body.auth-page .auth-box {
+    position: relative;
+    z-index: 2;
+}
+.auth-box {
+    background: rgba(20,18,16,0.92) !important;
+    border: 1px solid rgba(200,168,98,0.12) !important;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(200,168,98,0.03) !important;
+}
+.auth-box .logo {
+    font-size: 2.2rem !important;
+    letter-spacing: 0.05em;
+}
+.auth-box input:focus {
+    border-color: #c8a862 !important;
+    box-shadow: 0 0 0 4px rgba(200,168,98,0.08) !important;
+}
+.auth-box button {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.25,0.46,0.45,0.94) !important;
+}
+.auth-box button::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.12), transparent);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+.auth-box button:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 30px rgba(200,168,98,0.25) !important;
+}
+.auth-box button:hover::after { opacity: 1; }
+.auth-box button:active { transform: scale(0.98) !important; }
+.auth-box button:disabled {
+    opacity: 0.6 !important;
+    cursor: not-allowed !important;
+    transform: none !important;
+}
+.auth-box .error {
+    border-left: 3px solid #f87171 !important;
+}
+.auth-box .success {
+    border-left: 3px solid #4ade80 !important;
+}

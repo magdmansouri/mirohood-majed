@@ -1,0 +1,8 @@
+[10-Jul-2026 22:12:39 Asia/Tehran] PHP Fatal error:  Uncaught Error: Class "Person" not found in /home/lowfuz/public_html/database/process-existing-images.php:20
+Stack trace:
+#0 {main}
+  thrown in /home/lowfuz/public_html/database/process-existing-images.php on line 20
+[10-Jul-2026 22:13:02 Asia/Tehran] PHP Fatal error:  Uncaught Error: Class "Person" not found in /home/lowfuz/public_html/database/process-existing-images.php:20
+Stack trace:
+#0 {main}
+  thrown in /home/lowfuz/public_html/database/process-existing-images.php on line 20

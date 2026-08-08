@@ -1,0 +1,413 @@
+/* ============================================================
+   Mirohood Global UI Enhancements
+   - Ambient background (noise + orbs)
+   - Preloader
+   - Custom cursor
+   - Scroll reveal animations
+   - Floating labels
+   - Ripple effect
+   - Universal lightbox
+   ============================================================ */
+
+/* ============================================================
+   1. Ambient Canvas: noise + soft champagne orbs
+   ============================================================ */
+.miro-ambient {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    overflow: hidden;
+    background: #0a0908;
+}
+
+.miro-noise {
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    opacity: 0.035;
+    mix-blend-mode: overlay;
+    pointer-events: none;
+}
+
+.miro-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(90px);
+    opacity: 0.16;
+    pointer-events: none;
+    will-change: transform;
+}
+
+.miro-orb--1 {
+    width: 55vw;
+    height: 55vw;
+    max-width: 700px;
+    max-height: 700px;
+    background: radial-gradient(circle at center, rgba(200,168,98,0.55), transparent 65%);
+    top: -10%;
+    right: -10%;
+    animation: miroOrbFloat1 22s ease-in-out infinite;
+}
+
+.miro-orb--2 {
+    width: 45vw;
+    height: 45vw;
+    max-width: 600px;
+    max-height: 600px;
+    background: radial-gradient(circle at center, rgba(168,137,58,0.5), transparent 65%);
+    bottom: -12%;
+    left: -8%;
+    animation: miroOrbFloat2 18s ease-in-out infinite;
+}
+
+.miro-orb--3 {
+    width: 35vw;
+    height: 35vw;
+    max-width: 450px;
+    max-height: 450px;
+    background: radial-gradient(circle at center, rgba(138,133,128,0.35), transparent 65%);
+    top: 45%;
+    left: 35%;
+    opacity: 0.08;
+    animation: miroOrbFloat3 26s ease-in-out infinite;
+}
+
+@keyframes miroOrbFloat1 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(40px, -30px) scale(1.06); }
+}
+
+@keyframes miroOrbFloat2 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(-30px, 30px) scale(1.05); }
+}
+
+@keyframes miroOrbFloat3 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(20px, -20px) scale(1.04); }
+}
+
+/* ============================================================
+   2. Custom Cursor (desktop only)
+   ============================================================ */
+body.miro-custom-cursor {
+    cursor: none;
+}
+
+#miro-cursor {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 26px;
+    height: 26px;
+    border: 1px solid rgba(200,168,98,0.55);
+    border-radius: 50%;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    transition: width 0.2s ease, height 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+    z-index: 10000;
+    mix-blend-mode: difference;
+    will-change: transform;
+}
+
+#miro-cursor.miro-cursor--hover {
+    width: 50px;
+    height: 50px;
+    border-color: #c8a862;
+    background: rgba(200,168,98,0.08);
+}
+
+@media (pointer: coarse) {
+    #miro-cursor { display: none !important; }
+    body.miro-custom-cursor { cursor: auto; }
+}
+
+/* ============================================================
+   3. Scroll Reveal Animations
+   ============================================================ */
+[data-animate] {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.75s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.75s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    will-change: opacity, transform;
+}
+
+[data-animate="fade-in"] {
+    opacity: 0;
+    transform: none;
+}
+
+[data-animate="scale"] {
+    opacity: 0;
+    transform: scale(0.94);
+}
+
+[data-animate="zoom-in"] {
+    opacity: 0;
+    transform: scale(0.9) translateY(20px);
+}
+
+[data-animate].miro-revealed {
+    opacity: 1;
+    transform: none;
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    [data-animate] {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+    }
+    .miro-orb { animation: none !important; }
+}
+
+/* ============================================================
+   4. Floating Labels
+   ============================================================ */
+.miro-floating-label {
+    position: relative;
+    margin-bottom: 1.25rem;
+    display: block;
+}
+
+.miro-floating-label input,
+.miro-floating-label textarea,
+.miro-floating-label select {
+    width: 100%;
+    padding: 1rem 1.1rem 0.55rem;
+    margin-bottom: 0;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(200,168,98,0.08);
+    border-radius: 0.9rem;
+    color: #f4f1ea;
+    font-size: 0.9rem;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+    line-height: 1.5;
+    direction: inherit;
+}
+
+.miro-floating-label textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.miro-floating-label input:focus,
+.miro-floating-label textarea:focus,
+.miro-floating-label select:focus {
+    border-color: #c8a862;
+    background: rgba(255,255,255,0.06);
+    box-shadow: 0 0 0 3px rgba(200,168,98,0.06);
+}
+
+.miro-floating-label input::placeholder,
+.miro-floating-label textarea::placeholder {
+    color: transparent;
+}
+
+.miro-floating-label label {
+    position: absolute;
+    inset-inline-start: 1.1rem;
+    top: 0.9rem;
+    color: #8a8580;
+    font-size: 0.85rem;
+    pointer-events: none;
+    transition: all 0.25s ease;
+    padding: 0 0.25rem;
+    line-height: 1;
+    background: transparent;
+    border-radius: 0.25rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: calc(100% - 2.2rem);
+}
+
+.miro-floating-label input:focus + label,
+.miro-floating-label input:not(:placeholder-shown) + label,
+.miro-floating-label textarea:focus + label,
+.miro-floating-label textarea:not(:placeholder-shown) + label,
+.miro-floating-label select:focus + label,
+.miro-floating-label select:valid + label,
+.miro-floating-label select:not([value=""]) + label,
+.miro-floating-label.miro-floating--active label {
+    top: -0.55rem;
+    font-size: 0.65rem;
+    color: #c8a862;
+    background: #0a0908;
+}
+
+.miro-floating-label input:focus + label,
+.miro-floating-label textarea:focus + label,
+.miro-floating-label select:focus + label,
+.miro-floating-label.miro-floating--active input:focus + label,
+.miro-floating-label.miro-floating--active textarea:focus + label,
+.miro-floating-label.miro-floating--active select:focus + label {
+    color: #c8a862;
+}
+
+.miro-floating-label .error-message {
+    position: relative;
+    margin-top: 0.2rem;
+}
+
+/* Booking form compatibility: remove duplicate margin when combined with .form-group */
+.form-group.miro-floating-label {
+    margin-bottom: 0;
+}
+
+.form-group.miro-floating-label select {
+    padding-inline: 1.1rem 2.5rem;
+    background-position: right 1rem center;
+}
+
+/* ============================================================
+   5. Ripple Effect
+   ============================================================ */
+.miro-ripple {
+    position: relative;
+    overflow: hidden;
+    transform: translate3d(0,0,0);
+}
+
+.miro-ripple-effect {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(200,168,98,0.28);
+    transform: scale(0);
+    animation: miroRipple 0.7s linear;
+    pointer-events: none;
+}
+
+@keyframes miroRipple {
+    to {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+
+/* ============================================================
+   6. Universal Lightbox
+   ============================================================ */
+#miro-lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    padding: 1rem;
+}
+
+#miro-lightbox.miro-lightbox--active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.miro-lb-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(10,9,8,0.96);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+.miro-lb-stage {
+    position: relative;
+    z-index: 1;
+    max-width: 92vw;
+    max-height: 86vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.miro-lb-img {
+    max-width: 100%;
+    max-height: 86vh;
+    object-fit: contain;
+    border-radius: 0.5rem;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    transform: scale(0.96);
+    transition: transform 0.35s ease;
+}
+
+#miro-lightbox.miro-lightbox--active .miro-lb-img {
+    transform: scale(1);
+}
+
+.miro-lb-btn {
+    position: absolute;
+    z-index: 2;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(200,168,98,0.18);
+    color: #f4f1ea;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    font-size: 1rem;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+}
+
+.miro-lb-btn:hover {
+    background: rgba(200,168,98,0.15);
+    border-color: #c8a862;
+    color: #c8a862;
+    transform: scale(1.08);
+}
+
+.miro-lb-close { top: 1.2rem; right: 1.2rem; }
+.miro-lb-prev { left: 1.2rem; top: 50%; transform: translateY(-50%); }
+.miro-lb-next { right: 1.2rem; top: 50%; transform: translateY(-50%); }
+.miro-lb-prev:hover, .miro-lb-next:hover { transform: translateY(-50%) scale(1.08); }
+
+.miro-lb-caption {
+    position: absolute;
+    bottom: 1.2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    color: #f4f1ea;
+    font-size: 0.85rem;
+    padding: 0.5rem 1.2rem;
+    background: rgba(0,0,0,0.4);
+    border: 1px solid rgba(200,168,98,0.12);
+    border-radius: 9999px;
+    max-width: 80vw;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.miro-lb-counter {
+    position: absolute;
+    top: 1.2rem;
+    left: 1.2rem;
+    z-index: 2;
+    color: #8a8580;
+    font-size: 0.75rem;
+    padding: 0.3rem 0.9rem;
+    border: 1px solid rgba(200,168,98,0.12);
+    border-radius: 9999px;
+    background: rgba(0,0,0,0.3);
+}
+
+@media (max-width: 768px) {
+    .miro-lb-prev { left: 0.5rem; }
+    .miro-lb-next { right: 0.5rem; }
+    .miro-lb-close { top: 0.8rem; right: 0.8rem; }
+    .miro-lb-caption { bottom: 0.8rem; font-size: 0.75rem; }
+}

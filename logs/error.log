@@ -1,0 +1,23 @@
+2026-07-09 16:52:12 - uploadGalleryImage failed - SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'order) VALUES (?,?,?,?)' at line 1
+2026-07-09 17:09:42 - uploadGalleryImage failed - SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '' for key 'gallery_images.PRIMARY'
+2026-07-09 17:10:18 - uploadGalleryImage failed - SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '' for key 'gallery_images.PRIMARY'
+2026-07-09 17:13:03 - uploadGalleryImage failed - SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '' for key 'gallery_images.PRIMARY'
+2026-07-09 17:13:34 - uploadGalleryImage failed - SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '' for key 'gallery_images.PRIMARY'
+[11-Jul-2026 03:50:30 Asia/Tehran] PHP Warning:  Undefined array key "memory_used" in /home/lowfuz/public_html/views/admin/server.php on line 127
+[11-Jul-2026 03:50:30 Asia/Tehran] PHP Warning:  Undefined array key "memory_free" in /home/lowfuz/public_html/views/admin/server.php on line 139
+[11-Jul-2026 03:50:30 Asia/Tehran] PHP Warning:  Undefined array key "memory_used" in /home/lowfuz/public_html/views/admin/server.php on line 143
+[11-Jul-2026 04:32:37 Asia/Tehran] PHP Warning:  Array to string conversion in /home/lowfuz/public_html/views/layout.php on line 882
+[11-Jul-2026 04:32:57 Asia/Tehran] PHP Warning:  Array to string conversion in /home/lowfuz/public_html/views/layout.php on line 882
+[11-Jul-2026 04:33:02 Asia/Tehran] PHP Warning:  Array to string conversion in /home/lowfuz/public_html/views/layout.php on line 882
+[11-Jul-2026 04:33:06 Asia/Tehran] PHP Warning:  Array to string conversion in /home/lowfuz/public_html/views/layout.php on line 882
+[11-Jul-2026 21:48:54 Asia/Tehran] PHP Fatal error:  Uncaught Error: Call to undefined method Database::quote() in /home/lowfuz/public_html/database/install.php:355
+Stack trace:
+#0 {main}
+  thrown in /home/lowfuz/public_html/database/install.php on line 355
+[11-Jul-2026 22:26:34 Asia/Tehran] PHP Fatal error:  Uncaught Error: Call to undefined method Database::quote() in /home/lowfuz/public_html/database/install.php:355
+Stack trace:
+#0 {main}
+  thrown in /home/lowfuz/public_html/database/install.php on line 355
+[20-Jul-2026 09:55:34 Asia/Tehran] PHP Deprecated:  trim(): Passing null to parameter #1 ($string) of type string is deprecated in /home/lowfuz/public_html/index.php on line 26
+[21-Jul-2026 17:14:36 Asia/Tehran] PHP Deprecated:  trim(): Passing null to parameter #1 ($string) of type string is deprecated in /home/lowfuz/public_html/index.php on line 26
+[02-Aug-2026 10:11:20 Asia/Tehran] PHP Warning:  unlink(/home/lowfuz/public_html/cache/gallery_featured_4.json): No such file or directory in /home/lowfuz/public_html/includes/CacheHelper.php on line 28

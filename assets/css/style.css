@@ -1,0 +1,594 @@
+<?php
+// views/layout.php - قالب اصلی با CSS داخلی
+
+set_security_headers();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+if (!isset($page_title)) {
+    $page_title = SITE_NAME;
+}
+if (!isset($page_description)) {
+    $page_description = SITE_DESCRIPTION;
+}
+$content = $content ?? '';
+?>
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><?php echo h($page_title); ?></title>
+    <meta name="description" content="<?php echo h($page_description); ?>">
+    
+    <!-- ===== فونت‌های Google ===== -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100..800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    
+    <!-- ===== Font Awesome ===== -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+    <!-- ===== CSS کامل داخل صفحه ===== -->
+    <style>
+        /* ========================================
+           استایل‌های کامل سایت Mirohood
+           ======================================== */
+        
+        /* ----- تنظیمات پایه ----- */
+        :root {
+            --color-noir: #0a0908;
+            --color-ivory: #f4f1ea;
+            --color-champagne: #c8a862;
+            --color-muted: #8a8580;
+            --color-dark: #151413;
+            --color-glass: rgba(255, 255, 255, 0.03);
+            --color-glass-border: rgba(200, 168, 98, 0.12);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--color-noir);
+            color: var(--color-ivory);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        a {
+            color: var(--color-ivory);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: var(--color-champagne);
+        }
+
+        /* ----- کلاس‌های کمکی ----- */
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        @media (min-width: 640px) {
+            .container { padding: 0 2rem; }
+        }
+        @media (min-width: 1024px) {
+            .container { padding: 0 3rem; }
+        }
+
+        .text-center { text-align: center; }
+        .text-muted { color: var(--color-muted); }
+        .text-champagne { color: var(--color-champagne); }
+        .hidden { display: none !important; }
+
+        .flex { display: flex; }
+        .flex-col { flex-direction: column; }
+        .flex-1 { flex: 1; }
+        .items-center { align-items: center; }
+        .justify-between { justify-content: space-between; }
+        .gap-4 { gap: 1rem; }
+        .gap-6 { gap: 1.5rem; }
+
+        .grid { display: grid; }
+        .grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
+        .grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
+        .grid-cols-4 { grid-template-columns: repeat(4, 1fr); }
+
+        .w-full { width: 100%; }
+        .h-full { height: 100%; }
+        .min-h-screen { min-height: 100vh; }
+
+        .mx-auto { margin-left: auto; margin-right: auto; }
+        .mb-4 { margin-bottom: 1rem; }
+        .mb-6 { margin-bottom: 1.5rem; }
+        .mb-8 { margin-bottom: 2rem; }
+        .mb-10 { margin-bottom: 2.5rem; }
+        .mb-14 { margin-bottom: 3.5rem; }
+        .mt-4 { margin-top: 1rem; }
+        .mt-6 { margin-top: 1.5rem; }
+
+        .px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
+        .py-12 { padding-top: 3rem; padding-bottom: 3rem; }
+        .py-28 { padding-top: 7rem; padding-bottom: 7rem; }
+
+        .font-serif { font-family: 'Cormorant Garamond', Georgia, serif; }
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+        .font-inter { font-family: 'Inter', sans-serif; }
+
+        .label-mono {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--color-muted);
+        }
+
+        /* ----- نوار ناوبری ----- */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 50;
+            padding: 1rem 0;
+            background: transparent;
+            transition: all 0.4s ease;
+        }
+
+        .navbar.scrolled {
+            background: rgba(10, 9, 8, 0.92);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(200, 168, 98, 0.08);
+            padding: 0.6rem 0;
+        }
+
+        .navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar .logo {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-size: 1.6rem;
+            font-weight: 300;
+            color: var(--color-ivory);
+        }
+
+        .navbar .logo span {
+            color: var(--color-champagne);
+        }
+
+        .nav-links {
+            display: none;
+            list-style: none;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        @media (min-width: 768px) {
+            .nav-links { display: flex; }
+        }
+
+        .nav-links a {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--color-muted);
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--color-ivory);
+        }
+
+        .nav-links a.active {
+            color: var(--color-champagne);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--color-champagne);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        .menu-toggle {
+            background: none;
+            border: none;
+            color: var(--color-ivory);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .menu-toggle { display: none; }
+        }
+
+        /* ----- منوی موبایل ----- */
+        #mobile-menu {
+            position: fixed;
+            inset: 0;
+            z-index: 40;
+            background: var(--color-noir);
+            padding-top: 5rem;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        #mobile-menu ul {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            text-align: center;
+            list-style: none;
+        }
+
+        #mobile-menu a {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-size: 2rem;
+            font-weight: 300;
+            color: var(--color-ivory);
+        }
+
+        #mobile-menu a:hover {
+            color: var(--color-champagne);
+        }
+
+        /* ----- بخش هیرو ----- */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            padding: 6rem 1rem;
+            background: var(--color-noir);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            max-width: 800px;
+            padding: 2rem;
+        }
+
+        .hero-content h1 {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-size: clamp(2.5rem, 8vw, 5.5rem);
+            font-weight: 300;
+            line-height: 1.05;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-content h1 span {
+            color: var(--color-champagne);
+        }
+
+        .hero-content .subtitle {
+            font-size: 1.1rem;
+            color: var(--color-muted);
+            margin-bottom: 2.5rem;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* ----- دکمه CTA ----- */
+        .cta-button {
+            display: inline-block;
+            padding: 0.85rem 2.5rem;
+            border: 1px solid var(--color-champagne);
+            border-radius: 9999px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--color-ivory);
+            background: transparent;
+            transition: all 0.4s ease;
+            cursor: pointer;
+        }
+
+        .cta-button:hover {
+            background: var(--color-champagne);
+            color: var(--color-noir);
+            transform: scale(1.02);
+        }
+
+        /* ----- کارت‌های گلس ----- */
+        .glass-card {
+            background: var(--color-glass);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--color-glass-border);
+            border-radius: 1rem;
+            padding: 1.75rem;
+            transition: all 0.4s ease;
+        }
+
+        .glass-card:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(200, 168, 98, 0.25);
+            transform: translateY(-4px);
+        }
+
+        .gold-divider {
+            width: 2rem;
+            height: 2px;
+            background: linear-gradient(90deg, var(--color-champagne), transparent);
+            margin: 1rem 0;
+        }
+
+        /* ----- تصاویر گالری ----- */
+        .gallery-image {
+            position: relative;
+            overflow: hidden;
+            border-radius: 0.75rem;
+            aspect-ratio: 3/4;
+            background: var(--color-dark);
+            cursor: pointer;
+        }
+
+        .gallery-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+        .gallery-image:hover img {
+            transform: scale(1.05);
+        }
+
+        /* ----- فوتر ----- */
+        footer {
+            border-top: 1px solid rgba(200, 168, 98, 0.08);
+            padding: 2rem 0;
+            margin-top: 2rem;
+        }
+
+        footer a {
+            color: var(--color-muted);
+        }
+
+        footer a:hover {
+            color: var(--color-champagne);
+        }
+
+        /* ----- Toast ----- */
+        #toaster {
+            position: fixed;
+            bottom: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+        }
+
+        #toast-message {
+            background: #151413;
+            color: #f4f1ea;
+            border: 1px solid rgba(200, 168, 98, 0.3);
+            border-radius: 0.75rem;
+            padding: 0.75rem 1.5rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            max-width: 24rem;
+            text-align: center;
+        }
+
+        /* ----- افکت Reveal ----- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ----- وضعیت‌های رزرو ----- */
+        .status-badge {
+            display: inline-block;
+            padding: 0.2rem 0.75rem;
+            border-radius: 9999px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.6rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .status-badge.pending {
+            background: rgba(234, 179, 8, 0.2);
+            color: #fbbf24;
+            border: 1px solid rgba(234, 179, 8, 0.3);
+        }
+
+        .status-badge.confirmed {
+            background: rgba(34, 197, 94, 0.2);
+            color: #4ade80;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+
+        .status-badge.cancelled {
+            background: rgba(239, 68, 68, 0.2);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        /* ----- واکنش‌گرا (Responsive) ----- */
+        @media (max-width: 768px) {
+            .hero-content h1 {
+                font-size: clamp(2rem, 10vw, 3.5rem);
+            }
+            
+            .hero-content .subtitle {
+                font-size: 1rem;
+            }
+            
+            .glass-card {
+                padding: 1.25rem;
+            }
+            
+            .grid-cols-2 { grid-template-columns: repeat(1, 1fr); }
+            .grid-cols-3 { grid-template-columns: repeat(1, 1fr); }
+            .grid-cols-4 { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 480px) {
+            .navbar .logo {
+                font-size: 1.3rem;
+            }
+            
+            .cta-button {
+                padding: 0.7rem 1.8rem;
+                font-size: 0.65rem;
+            }
+            
+            .grid-cols-4 { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+    <?php echo render_partial('navbar', ['current_page' => $current_page ?? '']); ?>
+    <main class="flex-1" style="margin-top:4rem;"><?php echo $content; ?></main>
+    <?php echo render_partial('footer'); ?>
+    
+    <!-- ===== Toast ===== -->
+    <div id="toaster" class="hidden">
+        <div id="toast-message"></div>
+    </div>
+    
+    <!-- ===== جاوااسکریپت ===== -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            'use strict';
+            
+            // ----- منوی موبایل -----
+            const menuToggle = document.querySelector('.menu-toggle');
+            const mobileMenu = document.getElementById('mobile-menu');
+            
+            if (menuToggle && mobileMenu) {
+                menuToggle.addEventListener('click', function() {
+                    mobileMenu.classList.toggle('hidden');
+                    const icon = this.querySelector('i');
+                    if (icon) {
+                        icon.classList.toggle('fa-bars');
+                        icon.classList.toggle('fa-times');
+                    }
+                });
+                
+                mobileMenu.querySelectorAll('a').forEach(function(link) {
+                    link.addEventListener('click', function() {
+                        mobileMenu.classList.add('hidden');
+                        const icon = menuToggle.querySelector('i');
+                        if (icon) {
+                            icon.classList.remove('fa-times');
+                            icon.classList.add('fa-bars');
+                        }
+                    });
+                });
+            }
+            
+            // ----- Toast -----
+            const toaster = document.getElementById('toaster');
+            const toastMessage = document.getElementById('toast-message');
+            let toastTimeout = null;
+            
+            window.showToast = function(message, type) {
+                if (!toaster || !toastMessage) return;
+                
+                let bgColor = '#151413';
+                let borderColor = 'rgba(200,168,98,0.3)';
+                if (type === 'success') {
+                    bgColor = 'rgba(22,163,74,0.9)';
+                    borderColor = '#22c55e';
+                } else if (type === 'error') {
+                    bgColor = 'rgba(220,38,38,0.9)';
+                    borderColor = '#ef4444';
+                }
+                
+                toastMessage.textContent = message;
+                toastMessage.style.backgroundColor = bgColor;
+                toastMessage.style.borderColor = borderColor;
+                toaster.classList.remove('hidden');
+                
+                if (toastTimeout) clearTimeout(toastTimeout);
+                
+                toastTimeout = setTimeout(function() {
+                    toaster.classList.add('hidden');
+                }, 5000);
+            };
+            
+            // ----- افکت Reveal -----
+            const revealElements = document.querySelectorAll('.reveal');
+            
+            function checkReveal() {
+                const windowHeight = window.innerHeight;
+                const revealPoint = 150;
+                
+                revealElements.forEach(function(element) {
+                    const rect = element.getBoundingClientRect();
+                    const delay = parseFloat(element.getAttribute('data-delay')) || 0;
+                    
+                    if (rect.top < windowHeight - revealPoint) {
+                        setTimeout(function() {
+                            element.classList.add('visible');
+                        }, delay * 1000);
+                    }
+                });
+            }
+            
+            checkReveal();
+            window.addEventListener('scroll', checkReveal);
+            window.addEventListener('resize', checkReveal);
+            
+            // ----- هدر چسبنده -----
+            const navbar = document.querySelector('.navbar');
+            if (navbar) {
+                window.addEventListener('scroll', function() {
+                    if (window.scrollY > 50) {
+                        navbar.classList.add('scrolled');
+                    } else {
+                        navbar.classList.remove('scrolled');
+                    }
+                });
+            }
+            
+            console.log('Mirohood loaded successfully!');
+        });
+    </script>
+</body>
+</html>
