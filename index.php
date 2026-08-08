@@ -275,7 +275,7 @@ try {
 
     // Portfolio demos: one shared renderer with route-specific content and metadata.
     // Examples: /shop, /shop/products, /shop/product/coffee-machine, /ticket/event/concert
-    $demoSegments = array_values(array_filter(explode('/', $path), static fn($segment) => $segment !== ''));
+    $demoSegments = array_values(array_filter(explode('/', $path), function ($segment) { return $segment !== ''; }));
     $demoSlugs = ['shop', 'cafe', 'ticket', 'company', 'restaurant', 'realestate', 'hotel', 'medical'];
     if (!empty($demoSegments) && in_array($demoSegments[0], $demoSlugs, true)) {
         require_once BASE_PATH . '/includes/DemoRenderer.php';
