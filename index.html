@@ -1,0 +1,234 @@
+<?php
+// index.php - نقطه ورود اصلی پروژه Mirohood
+
+// ============================================================
+// بارگذاری تنظیمات و توابع
+// ============================================================
+require_once __DIR__ . '/config/config.php';
+require_once __DIR__ . '/includes/security.php';
+require_once __DIR__ . '/includes/functions.php';
+require_once __DIR__ . '/config/database.php';
+
+// ============================================================
+// Autoloader برای مدل‌ها
+// ============================================================
+spl_autoload_register(function ($className) {
+    $file = MODELS_PATH . '/' . $className . '.php';
+    if (file_exists($file)) {
+        require_once $file;
+    }
+});
+
+// ============================================================
+// مسیریابی - پردازش URL
+// ============================================================
+$path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+$path = trim($path, '/');
+
+// حذف مسیر پایه اگر پروژه در ساب‌فولدر است
+$basePath = trim(dirname($_SERVER['SCRIPT_NAME']), '/');
+if (!empty($basePath) && strpos($path, $basePath) === 0) {
+    $path = trim(substr($path, strlen($basePath)), '/');
+}
+
+// ============================================================
+// API Routes (درخواست‌های AJAX)
+// ============================================================
+if (strpos($path, 'admin/api/') === 0) {
+    $apiPath = substr($path, 9);
+    require_once CONTROLLERS_PATH . '/AdminController.php';
+    $controller = new AdminController();
+    
+    // بررسی CSRF برای درخواست‌های POST
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        if (!isset($_POST['csrf_token']) || !verify_csrf_token($_POST['csrf_token'])) {
+            json_response(['success' => false, 'message' => 'Invalid security token'], 403);
+        }
+    }
+    
+    switch ($apiPath) {
+        case 'booking-submit':
+            require_once CONTROLLERS_PATH . '/BookingController.php';
+            (new BookingController())->submit();
+            break;
+        case 'available-times':
+            require_once CONTROLLERS_PATH . '/BookingController.php';
+            (new BookingController())->getAvailableTimes();
+            break;
+        case 'update-booking-status':
+            $controller->updateBookingStatus();
+            break;
+        case 'upload-gallery':
+            $controller->uploadGalleryImage();
+            break;
+        case 'delete-gallery':
+            $controller->deleteGalleryImage();
+            break;
+        case 'update-content':
+            $controller->updateContent();
+            break;
+        default:
+            http_response_code(404);
+            echo json_encode(['success' => false, 'message' => 'API endpoint not found']);
+            break;
+    }
+    exit;
+}
+
+// ============================================================
+// Page Routes (صفحات اصلی)
+// ============================================================
+try {
+    switch ($path) {
+        // صفحه اصلی
+        case '':
+        case 'home':
+        case 'index':
+            require_once CONTROLLERS_PATH . '/HomeController.php';
+            (new HomeController())->index();
+            break;
+        
+        // صفحه رزرو
+        case 'booking':
+            require_once CONTROLLERS_PATH . '/BookingController.php';
+            $ctrl = new BookingController();
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                $ctrl->submit();
+            } else {
+                $ctrl->index();
+            }
+            break;
+        
+        // صفحه گالری
+        case 'gallery':
+            require_once CONTROLLERS_PATH . '/GalleryController.php';
+            (new GalleryController())->index();
+            break;
+        
+        // پنل ادمین
+        case 'admin':
+            require_once CONTROLLERS_PATH . '/AdminController.php';
+            (new AdminController())->index();
+            break;
+        
+        case 'admin/bookings':
+            require_once CONTROLLERS_PATH . '/AdminController.php';
+            (new AdminController())->bookings();
+            break;
+        
+        case 'admin/gallery':
+            require_once CONTROLLERS_PATH . '/AdminController.php';
+            (new AdminController())->gallery();
+            break;
+        
+        case 'admin/content':
+            require_once CONTROLLERS_PATH . '/AdminController.php';
+            (new AdminController())->content();
+            break;
+        
+        case 'admin/login':
+            require_once CONTROLLERS_PATH . '/AdminController.php';
+            (new AdminController())->login();
+            break;
+        
+        case 'admin/login-submit':
+            require_once CONTROLLERS_PATH . '/AdminController.php';
+            (new AdminController())->loginSubmit();
+            break;
+        
+        case 'admin/logout':
+            require_once CONTROLLERS_PATH . '/AdminController.php';
+            (new AdminController())->logout();
+            break;
+        
+        // فایل‌های استاتیک (assets, uploads)
+        default:
+            $filePath = __DIR__ . '/' . $path;
+            if (file_exists($filePath) && is_file($filePath)) {
+                $ext = pathinfo($filePath, PATHINFO_EXTENSION);
+                $mimeTypes = [
+                    'css' => 'text/css',
+                    'js' => 'application/javascript',
+                    'jpg' => 'image/jpeg',
+                    'jpeg' => 'image/jpeg',
+                    'png' => 'image/png',
+                    'gif' => 'image/gif',
+                    'webp' => 'image/webp',
+                    'svg' => 'image/svg+xml',
+                    'ico' => 'image/x-icon',
+                    'mp4' => 'video/mp4',
+                    'webm' => 'video/webm',
+                    'pdf' => 'application/pdf',
+                    'json' => 'application/json',
+                    'xml' => 'application/xml',
+                    'txt' => 'text/plain'
+                ];
+                
+                if (isset($mimeTypes[$ext])) {
+                    header('Content-Type: ' . $mimeTypes[$ext]);
+                }
+                
+                // کش برای فایل‌های استاتیک
+                if (in_array($ext, ['css', 'js', 'jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'ico'])) {
+                    header('Cache-Control: public, max-age=31536000');
+                    header('Expires: ' . gmdate('D, d M Y H:i:s', time() + 31536000) . ' GMT');
+                }
+                
+                readfile($filePath);
+                exit;
+            }
+            
+            // صفحه 404
+            http_response_code(404);
+            echo '<!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>404 - Page Not Found</title>
+                <style>
+                    body { font-family: Arial, sans-serif; background: #0a0a0a; color: #f4f1ea; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; text-align: center; }
+                    h1 { font-size: 4rem; margin: 0; color: #c8a862; }
+                    p { font-size: 1.2rem; color: #a0a0a0; }
+                    a { color: #c8a862; text-decoration: none; border: 1px solid #c8a862; padding: 0.5rem 2rem; border-radius: 9999px; display: inline-block; margin-top: 1.5rem; transition: all 0.3s ease; }
+                    a:hover { background: #c8a862; color: #0a0a0a; }
+                </style>
+            </head>
+            <body>
+                <div>
+                    <h1>404</h1>
+                    <p>Page not found</p>
+                    <a href="/">Go Home</a>
+                </div>
+            </body>
+            </html>';
+            break;
+    }
+} catch (Exception $e) {
+    log_error('Routing error', ['path' => $path, 'error' => $e->getMessage()]);
+    http_response_code(500);
+    echo '<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>500 - Server Error</title>
+        <style>
+            body { font-family: Arial, sans-serif; background: #0a0a0a; color: #f4f1ea; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; text-align: center; }
+            h1 { font-size: 4rem; margin: 0; color: #ef4444; }
+            p { font-size: 1.2rem; color: #a0a0a0; }
+            a { color: #c8a862; text-decoration: none; border: 1px solid #c8a862; padding: 0.5rem 2rem; border-radius: 9999px; display: inline-block; margin-top: 1.5rem; transition: all 0.3s ease; }
+            a:hover { background: #c8a862; color: #0a0a0a; }
+        </style>
+    </head>
+    <body>
+        <div>
+            <h1>500</h1>
+            <p>Server Error</p>
+            <p style="font-size:0.9rem;color:#666;">' . htmlspecialchars($e->getMessage()) . '</p>
+            <a href="/">Go Home</a>
+        </div>
+    </body>
+    </html>';
+}
+?>
