@@ -1,0 +1,5 @@
+<?php
+$stmt=db()->prepare('SELECT * FROM shop_products WHERE id=? AND status=1');$stmt->execute([$_GET['id']??0]);$p=$stmt->fetch();if(!$p){http_response_code(404);page_header('محصول پیدا نشد','shop');echo '<section class="shop-wrap"><div class="shell"><div class="empty">محصول پیدا نشد.</div></div></section>';page_footer();return;}page_header($p['name'],'shop');
+?>
+<section class="shop-wrap"><div class="shell product-detail"><div><img src="<?=url('assets/images/'.$p['image'])?>" alt="<?=e($p['name'])?>"></div><div><p class="kicker"><?=e($p['category'])?></p><h1><?=e($p['name'])?></h1><div class="price"><?=money($p['price'])?></div><p><?=e($p['description'])?></p><p class="notice">سایزهای موجود: <?=e($p['sizes'])?> · موجودی: <?=e($p['stock'])?></p><form method="post" action="<?=url('shop/add')?>" class="buttons"><input type="hidden" name="csrf" value="<?=csrf()?>"><input type="hidden" name="id" value="<?=$p['id']?>"><input class="qty" type="number" name="qty" min="1" max="<?=max(1,(int)$p['stock'])?>" value="1"><button class="btn btn-gold">افزودن به سبد خرید</button></form></div></div></section>
+<?php page_footer(); ?>

@@ -1,0 +1,5 @@
+<?php
+if(is_admin())redirect('admin');$error='';if($_SERVER['REQUEST_METHOD']==='POST'){try{verify_csrf();$u=trim($_POST['username']??'');$p=$_POST['password']??'';$s=db()->prepare('SELECT * FROM admins WHERE username=? LIMIT 1');$s->execute([$u]);$a=$s->fetch();if(!$a||!password_verify($p,$a['password_hash']))throw new RuntimeException('نام کاربری یا رمز درست نیست.');session_regenerate_id(true);$_SESSION['admin_id']=$a['id'];redirect('admin');}catch(Throwable $e){$error=$e->getMessage();}}page_header('ورود مدیریت', 'admin');
+?>
+<section class="admin-login"><form method="post" class="form-card"><p class="kicker">MAJED HUB / ADMIN</p><h2>ورود مدیریت</h2><?php if($error):?><div class="notice"><?=e($error)?></div><?php endif;?><input type="hidden" name="csrf" value="<?=csrf()?>"><div class="field"><label>نام کاربری</label><input name="username" required></div><div class="field"><label>رمز عبور</label><input name="password" type="password" required></div><button class="form-btn" style="background:var(--gold);color:#0a0908">ورود</button></form></section>
+<?php page_footer(); ?>

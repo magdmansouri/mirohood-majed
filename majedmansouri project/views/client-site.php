@@ -1,0 +1,12 @@
+<?php
+$sites=[
+ 'studio'=>['Nexa Atelier','architecture-hero.jpg','Architecture & Interior','فضاهایی که قبل از ساخته‌شدن، روایت دارند.','طراحی داخلی، معماری مسکونی و فضاهای تجاری با نگاه متریال‌محور و ماندگار.',['طراحی داخلی','بازسازی مسکونی','فضای تجاری','مشاوره متریال']],
+ 'estate'=>['Northline Estates','estate-hero.jpg','Modern Real Estate','خانه‌ای که با سبک زندگی شما هم‌جهت است.','انتخاب، فروش و سرمایه‌گذاری در فایل‌های مسکونی و تجاری منتخب.',['خرید ملک','فروش و اجاره','سرمایه‌گذاری','ارزیابی ملک']],
+ 'clinic'=>['Aura Clinic','clinic-hero.jpg','Wellness & Skincare','مراقبت دقیق، زیبایی طبیعی.','تجربه‌ای آرام و تخصصی برای مراقبت پوست، زیبایی و سلامت فردی.',['مشاوره پوست','درمان‌های تخصصی','مراقبت روزانه','رزرو آنلاین']],
+];$d=$sites[$siteType];page_header($d[0],$siteType);
+?>
+<section class="client-hero <?=$siteType?>"><img src="<?=url('assets/images/'.$d[1])?>" alt="<?=e($d[0])?>"><div class="client-hero-copy"><p class="kicker"><?=e($d[2])?></p><h1><?=e($d[3])?></h1><p><?=e($d[4])?></p><div class="buttons"><a class="btn btn-gold" href="#contact">شروع همکاری</a><a class="btn" href="<?=url($siteType.'/admin')?>">داشبورد اختصاصی</a></div></div></section>
+<section id="services" class="section"><div class="shell"><div class="heading"><div><p>SERVICES</p><h2>خدمات <?=e($d[0])?></h2></div></div><div class="benefits"><?php foreach($d[5] as $i=>$service):?><article class="benefit"><small>0<?=$i+1?> / <?=strtoupper($siteType)?></small><h3><?=e($service)?></h3><p>راهکار اختصاصی، روند شفاف و تجربه‌ای دقیق برای هر مشتری.</p></article><?php endforeach;?></div></div></section>
+<section id="projects" class="section"><div class="shell editorial"><div class="editorial-copy"><p class="kicker">SELECTED EXPERIENCE</p><h2><?=e($d[0])?><br><em>made distinct.</em></h2><p>این صفحه نمونه‌ای از سایت‌هایی است که مشتریان طراحی سایت می‌توانند برای کسب‌وکار خود داشته باشند؛ با ساختار محتوا، فرم درخواست و داشبورد مستقل.</p></div><div class="editorial-img"><img src="<?=url('assets/images/'.$d[1])?>" alt="<?=e($d[0])?>"></div></div></section>
+<section id="contact" class="section"><div class="shell portfolio-contact"><div><p class="kicker">GET IN TOUCH</p><h2>برای دریافت مشاوره و شروع همکاری در ارتباط باشیم.</h2><p>فرم و درخواست‌های این سایت از داشبورد اختصاصی مدیریت می‌شوند.</p></div><div class="portfolio-contact-links"><a class="btn btn-gold" href="mailto:hello@example.com">ارسال درخواست</a><a class="btn" href="<?=url($siteType.'/admin')?>">ورود مدیریت</a></div></div></section>
+<?php page_footer(); ?>
