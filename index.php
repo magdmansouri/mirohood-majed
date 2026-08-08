@@ -208,11 +208,17 @@ try {
         $xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
         $xml .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
 
+        $portfolioUrl = 'https://majedmansouri.ir';
         $staticUrls = [
-            ['loc' => SITE_URL . '/', 'priority' => '1.0', 'changefreq' => 'weekly'],
-            ['loc' => SITE_URL . '/gallery', 'priority' => '0.9', 'changefreq' => 'weekly'],
-            ['loc' => SITE_URL . '/booking', 'priority' => '0.8', 'changefreq' => 'monthly'],
-            ['loc' => SITE_URL . '/about', 'priority' => '0.8', 'changefreq' => 'monthly'],
+            ['loc' => $portfolioUrl . '/', 'priority' => '1.0', 'changefreq' => 'weekly'],
+            ['loc' => $portfolioUrl . '/shop', 'priority' => '0.9', 'changefreq' => 'weekly'],
+            ['loc' => $portfolioUrl . '/cafe', 'priority' => '0.8', 'changefreq' => 'monthly'],
+            ['loc' => $portfolioUrl . '/ticket', 'priority' => '0.8', 'changefreq' => 'weekly'],
+            ['loc' => $portfolioUrl . '/company', 'priority' => '0.8', 'changefreq' => 'monthly'],
+            ['loc' => $portfolioUrl . '/restaurant', 'priority' => '0.8', 'changefreq' => 'monthly'],
+            ['loc' => $portfolioUrl . '/realestate', 'priority' => '0.8', 'changefreq' => 'weekly'],
+            ['loc' => $portfolioUrl . '/hotel', 'priority' => '0.8', 'changefreq' => 'monthly'],
+            ['loc' => $portfolioUrl . '/medical', 'priority' => '0.8', 'changefreq' => 'monthly'],
         ];
 
         foreach ($staticUrls as $u) {
@@ -267,12 +273,23 @@ try {
         exit;
     }
 
+    // Portfolio demos: one shared renderer with route-specific content and metadata.
+    // Examples: /shop, /shop/products, /shop/product/coffee-machine, /ticket/event/concert
+    $demoSegments = array_values(array_filter(explode('/', $path), static fn($segment) => $segment !== ''));
+    $demoSlugs = ['shop', 'cafe', 'ticket', 'company', 'restaurant', 'realestate', 'hotel', 'medical'];
+    if (!empty($demoSegments) && in_array($demoSegments[0], $demoSlugs, true)) {
+        require_once BASE_PATH . '/includes/DemoRenderer.php';
+        $subpage = $demoSegments[1] ?? '';
+        (new DemoRenderer())->demo($demoSegments[0], $subpage);
+        exit;
+    }
+
     switch ($path) {
         case '':
         case 'home':
         case 'index':
-            require_once CONTROLLERS_PATH . '/HomeController.php';
-            (new HomeController())->index();
+            require_once BASE_PATH . '/includes/DemoRenderer.php';
+            (new DemoRenderer())->portfolio();
             break;
 
         case 'booking':
