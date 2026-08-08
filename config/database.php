@@ -58,6 +58,11 @@ class Database {
         return $this->connection->exec($sql);
     }
 
+    /** Quote a scalar value for legacy schema setup statements. */
+    public function quote($value) {
+        return $this->connection->quote($value);
+    }
+
     public function fetchOne($sql, $params = []) {
         return $this->query($sql, $params)->fetch();
     }
