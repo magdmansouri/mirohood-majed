@@ -1,0 +1,11 @@
+# Run the PHP front controller for all portfolio and application routes.
+DirectoryIndex index.php
+Options -Indexes
+RewriteEngine On
+
+# Keep real files and directories (assets, uploads, etc.) directly accessible.
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+RewriteRule ^ index.php [QSA,L]
