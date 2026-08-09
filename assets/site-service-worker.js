@@ -1,5 +1,5 @@
 // assets/site-service-worker.js - Site-wide PWA service worker
-const CACHE_NAME = 'mirohood-site-v2';
+const CACHE_NAME = 'majed-portfolio-v4';
 const STATIC_ASSETS = [
   '/',
   '/assets/css/style.css',
@@ -50,16 +50,19 @@ self.addEventListener('fetch', function(event) {
   // Skip admin and dynamic routes
   if (url.pathname.startsWith('/admin') || url.pathname.startsWith('/database') || url.pathname.startsWith('/logout')) return;
 
-  // Cache-first for static assets
+  // Network-first static assets: a portfolio must show the latest CSS and imagery
+  // after deployment, while still retaining an offline fallback.
   if (isStaticAsset(request.url)) {
     event.respondWith(
-      caches.match(request).then(function(response) {
-        return response || fetch(request).then(function(networkResponse) {
-          return caches.open(CACHE_NAME).then(function(cache) {
+      fetch(request).then(function(networkResponse) {
+        if (networkResponse && networkResponse.ok) {
+          caches.open(CACHE_NAME).then(function(cache) {
             cache.put(request, networkResponse.clone());
-            return networkResponse;
           });
-        });
+        }
+        return networkResponse;
+      }).catch(function() {
+        return caches.match(request);
       })
     );
     return;
