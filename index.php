@@ -529,7 +529,7 @@ try {
             break;
     }
 
-} catch (Exception $e) {
+} catch (Throwable $e) {
     error_log('Routing error: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine());
 
     if (ob_get_level()) { ob_end_clean(); }
