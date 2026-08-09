@@ -902,6 +902,7 @@ $navItems = [
     <link rel="stylesheet" href="<?php echo asset('css/admin-pro.css'); ?>">
 </head>
 <body>
+    <a class="admin-skip-link" href="#admin-main-content">پرش به محتوای اصلی</a>
 
     <!-- ===== Topbar (Mobile) ===== -->
     <div class="admin-topbar">
@@ -941,7 +942,7 @@ $navItems = [
     </aside>
 
     <!-- ===== Main Content ===== -->
-    <main class="admin-main">
+    <main class="admin-main" id="admin-main-content" tabindex="-1">
         <div id="ios-pwa-hint" class="ios-pwa-hint" style="display:none;">
             <i class="fas fa-share" style="transform:rotate(180deg);font-size:0.9rem;"></i>
             <span>برای نصب اپ روی آیفون/آیپد، دکمهٔ Share در سافاری را بزنید و «Add to Home Screen» را انتخاب کنید.</span>
