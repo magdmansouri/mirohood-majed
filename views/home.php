@@ -511,7 +511,7 @@ $gallery = $gallery ?? [];
                 <span style="color:#c8a862;"><?php echo h($content['home.about_title_line2'] ?? 'Rooted in Light.'); ?></span>
             </h2>
             <p style="color:#8a8580;font-size:0.95rem;line-height:1.9;margin-top:1.2rem;">
-                <?php echo h($content['home.about_text'] ?? 'Mirohood has been working out of Tehran since 2021. Every session is built around light and framing that gets close to who you actually are, instead of repeating the same familiar templates.'); ?>
+                <?php echo h($content['home.about_text'] ?? 'Mirohood has been working out of Ahvaz since 2021. Every session is built around light and framing that gets close to who you actually are, instead of repeating the same familiar templates.'); ?>
             </p>
             <a href="<?php echo url('about'); ?>" class="btn-outline link-arrow" style="margin-top:1.5rem;">
                 <?php echo h($content['home.about_button'] ?? 'Learn More'); ?> <i class="fas fa-arrow-right" style="font-size:0.6rem;"></i>

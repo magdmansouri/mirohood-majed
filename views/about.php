@@ -425,7 +425,7 @@ $website = $content['about.website'] ?? '';
         <div class="about-contact-grid">
             <div class="about-contact-card">
                 <h3><i class="fas fa-map-marker-alt"></i> <?php echo h($content['about.address_label'] ?? 'Studio Address'); ?></h3>
-                <p><?php echo nl2br(h($content['about.address'] ?? 'Valiasr Street, above Saei Park, No. 12, Tehran, Iran')); ?></p>
+                <p><?php echo nl2br(h($content['about.address'] ?? 'Ahvaz, Iran')); ?></p>
             </div>
             <div class="about-contact-card">
                 <h3><i class="fas fa-phone-alt"></i> <?php echo h($content['about.contact_label'] ?? 'Get in Touch'); ?></h3>

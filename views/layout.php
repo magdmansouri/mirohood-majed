@@ -41,7 +41,7 @@ $canonical_url = preg_replace('/#.*$/', '', $canonical_url);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo h($page_title); ?> | Mirohood</title>
     <meta name="description" content="<?php echo h($page_description); ?>">
-    <meta name="keywords" content="استودیو عکاسی, عکاسی پرتره, عکاسی برند, فیلمبرداری برند, Mirohood, رزرو عکاسی, عکاس حرفه‌ای, استودیو عکس تهران">
+    <meta name="keywords" content="استودیو عکاسی, عکاسی پرتره, عکاسی برند, فیلمبرداری برند, Mirohood, رزرو عکاسی, عکاس حرفه‌ای, استودیو عکس اهواز">
     <meta name="author" content="Mirohood">
     <meta name="robots" content="<?php echo h($robots); ?>">
     <link rel="canonical" href="<?php echo h($canonical_url); ?>">
