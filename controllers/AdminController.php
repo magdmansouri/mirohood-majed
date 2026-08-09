@@ -37,7 +37,10 @@ class AdminController {
     }
 
     private function checkAuth() {
-        if (!is_logged_in()) {
+        $expired = isset($_SESSION['admin_login_at'])
+            && (time() - (int) $_SESSION['admin_login_at']) > 28800;
+        if (!is_logged_in() || $expired) {
+            if ($expired) { session_unset(); session_destroy(); }
             header('Location: ' . url('admin/login'));
             exit;
         }
