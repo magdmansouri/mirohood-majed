@@ -14,5 +14,9 @@ class DemoRenderer
         require VIEWS_PATH . '/demo.php';
     }
     public function portfolio() { $demos = $this->demos; require VIEWS_PATH . '/portfolio.php'; }
+
+    /** Public, read-only showcase of the management dashboard design. */
+    public function dashboardDemo() { require VIEWS_PATH . '/dashboard-demo.php'; }
+
     private function subpageTitle($page) { return ['products'=>'محصولات','cart'=>'سبد خرید','checkout'=>'تکمیل سفارش','product'=>'جزئیات محصول','events'=>'رویدادها','event'=>'جزئیات رویداد','menu'=>'منو','gallery'=>'گالری','contact'=>'تماس با ما'][$page] ?? 'دمو'; }
 }

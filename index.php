@@ -273,6 +273,13 @@ try {
         exit;
     }
 
+    // Public dashboard showcase — read-only mock data, separate from /admin.
+    if ($path === 'dashboard') {
+        require_once BASE_PATH . '/includes/DemoRenderer.php';
+        (new DemoRenderer())->dashboardDemo();
+        exit;
+    }
+
     // Portfolio demos: one shared renderer with route-specific content and metadata.
     // Examples: /shop, /shop/products, /shop/product/coffee-machine, /ticket/event/concert
     $demoSegments = array_values(array_filter(explode('/', $path), function ($segment) { return $segment !== ''; }));
