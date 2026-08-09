@@ -21,7 +21,7 @@ $navItems = [
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo h($page_title); ?> | پنل ادمین Mirohood</title>
+    <title><?php echo h($page_title); ?> | Majed Control</title>
     <meta name="theme-color" content="#0a0908">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -899,21 +899,25 @@ $navItems = [
             box-shadow: 0 20px 60px rgba(0,0,0,0.5);
         }
     </style>
+    <link rel="stylesheet" href="<?php echo asset('css/admin-pro.css'); ?>">
 </head>
 <body>
 
     <!-- ===== Topbar (Mobile) ===== -->
     <div class="admin-topbar">
-        <span class="logo">Miro<span>hood</span></span>
-        <button id="sidebarToggle"><i class="fas fa-bars"></i></button>
+        <span class="logo">Majed<span>Control</span></span>
+        <div class="admin-topbar-actions">
+            <button class="theme-toggle" type="button" aria-label="تغییر حالت رنگ" aria-pressed="false"><i class="fas fa-moon"></i></button>
+            <button id="sidebarToggle" type="button" aria-label="باز کردن منوی مدیریت"><i class="fas fa-bars"></i></button>
+        </div>
     </div>
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
     <!-- ===== Sidebar ===== -->
     <aside class="admin-sidebar" id="adminSidebar">
         <div class="logo-box">
-            <div class="logo">Miro<span>hood</span></div>
-            <div class="tag">Admin Panel</div>
+            <div class="logo">Majed<span>Control</span></div>
+            <div class="tag">پنل مدیریت</div>
         </div>
         <nav class="admin-nav">
             <?php foreach ($navItems as $item): ?>
@@ -924,6 +928,7 @@ $navItems = [
             <?php endforeach; ?>
         </nav>
         <div class="bottom-box">
+            <button class="theme-toggle sidebar-theme-toggle" type="button" aria-label="تغییر حالت رنگ" aria-pressed="false"><i class="fas fa-moon"></i><span>حالت روشن</span></button>
             <a href="<?php echo url(''); ?>" class="view-site" target="_blank">
                 <i class="fas fa-arrow-up-left-from-circle"></i>
                 <span>مشاهده سایت</span>
@@ -989,6 +994,25 @@ $navItems = [
 
     <script>
     document.addEventListener('DOMContentLoaded', function() {
+        // ===== Persisted theme =====
+        var themeToggles = document.querySelectorAll('.theme-toggle');
+        function setAdminTheme(theme) {
+            var isLight = theme === 'light';
+            document.body.classList.toggle('admin-light', isLight);
+            themeToggles.forEach(function(button) {
+                button.setAttribute('aria-pressed', isLight ? 'true' : 'false');
+                var icon = button.querySelector('i');
+                if (icon) icon.className = isLight ? 'fas fa-sun' : 'fas fa-moon';
+                var label = button.querySelector('span');
+                if (label) label.textContent = isLight ? 'حالت تیره' : 'حالت روشن';
+            });
+            try { localStorage.setItem('majed-admin-theme', theme); } catch (e) {}
+        }
+        var storedTheme = null;
+        try { storedTheme = localStorage.getItem('majed-admin-theme'); } catch (e) {}
+        setAdminTheme(storedTheme === 'light' ? 'light' : 'dark');
+        themeToggles.forEach(function(button) { button.addEventListener('click', function() { setAdminTheme(document.body.classList.contains('admin-light') ? 'dark' : 'light'); }); });
+
         // ===== Sidebar Toggle =====
         var sidebar = document.getElementById('adminSidebar');
         var overlay = document.getElementById('sidebarOverlay');

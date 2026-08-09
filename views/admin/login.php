@@ -7,7 +7,7 @@ $error = $error ?? '';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ورود مدیریت | Mirohood</title>
+    <title>ورود مدیریت | Majed Control</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
@@ -112,19 +112,20 @@ $error = $error ?? '';
 </head>
 <body>
     <div class="login-box">
-        <div class="logo">Miro<span>hood</span></div>
-        <div class="subtitle">Admin Panel</div>
+        <div class="logo">Majed<span>Control</span></div>
+        <div class="subtitle">فضای مدیریت پروژه</div>
         
         <?php if (!empty($error)): ?>
-            <div class="error"><?php echo htmlspecialchars($error); ?></div>
+            <div class="error" role="alert" aria-live="polite"><?php echo h($error); ?></div>
         <?php endif; ?>
         
-        <form method="POST" action="">
-            <label>نام کاربری</label>
-            <input type="text" name="username" required autofocus>
+        <form method="POST" action="" autocomplete="on">
+            <?php echo csrf_field(); ?>
+            <label for="admin-username">نام کاربری</label>
+            <input id="admin-username" type="text" name="username" autocomplete="username" required autofocus>
             
-            <label>رمز عبور</label>
-            <input type="password" name="password" required>
+            <label for="admin-password">رمز عبور</label>
+            <input id="admin-password" type="password" name="password" autocomplete="current-password" required>
             
             <button type="submit">
                 <i class="fas fa-arrow-left" style="margin-left:0.4rem;"></i>

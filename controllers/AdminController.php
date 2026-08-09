@@ -56,16 +56,27 @@ class AdminController {
 
     public function login() {
         $error = '';
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $username = $_POST['username'] ?? '';
-            $password = $_POST['password'] ?? '';
+        $csrfToken = generate_csrf_token();
 
-            if ($username === ADMIN_USERNAME && verify_password($password, ADMIN_PASSWORD_HASH)) {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $username = is_string($_POST['username'] ?? null) ? trim($_POST['username']) : '';
+            $password = is_string($_POST['password'] ?? null) ? $_POST['password'] : '';
+            $postedToken = $_POST['csrf_token'] ?? null;
+            $attemptKey = 'admin_login_' . hash('sha256', get_client_ip());
+
+            if (!verify_csrf_token($postedToken)) {
+                $error = 'نشست شما منقضی شده است. لطفاً دوباره تلاش کنید.';
+            } elseif (!rate_limit($attemptKey, 5, 900)) {
+                $error = 'تعداد تلاش‌های ورود زیاد است. لطفاً ۱۵ دقیقه دیگر دوباره امتحان کنید.';
+            } elseif (hash_equals(ADMIN_USERNAME, $username) && verify_password($password, ADMIN_PASSWORD_HASH)) {
+                session_regenerate_id(true);
                 $_SESSION['admin_logged_in'] = true;
+                $_SESSION['admin_login_at'] = time();
                 header('Location: ' . url('admin'));
                 exit;
+            } else {
+                $error = 'نام کاربری یا رمز عبور درست نیست.';
             }
-            $error = 'نام کاربری یا رمز عبور اشتباه است';
         }
         include VIEWS_PATH . '/admin/login.php';
         exit;
