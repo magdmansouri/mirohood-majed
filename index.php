@@ -273,6 +273,13 @@ try {
         exit;
     }
 
+    // Public portfolio conversion tools and English showcase.
+    if (in_array($path, ['start-project', 'demo-customizer', 'about-me', 'en'], true)) {
+        require_once BASE_PATH . '/includes/DemoRenderer.php';
+        (new DemoRenderer())->tool($path);
+        exit;
+    }
+
     // Public dashboard showcase — read-only mock data, separate from /admin.
     if ($path === 'dashboard') {
         require_once BASE_PATH . '/includes/DemoRenderer.php';

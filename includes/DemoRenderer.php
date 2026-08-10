@@ -9,11 +9,15 @@ class DemoRenderer
     {
         if (!$this->isDemo($slug)) { http_response_code(404); return; }
         if ($subpage === 'dashboard') { $this->industryDashboard($slug); return; }
+        if ($subpage === 'case-study') { $this->caseStudy($slug); return; }
         $demo = $this->demos[$slug];
         $title = ($subpage ? $this->subpageTitle($subpage) . ' | ' : '') . 'نمونه طراحی ' . $demo['label'] . ' | ماجد منصوری';
         $description = $demo['description'];
         require VIEWS_PATH . '/demo.php';
     }
+
+    public function caseStudy($slug) { if (!$this->isDemo($slug)) { http_response_code(404); return; } $demo=$this->demos[$slug]; require VIEWS_PATH . '/case-study.php'; }
+    public function tool($tool) { $demos=$this->demos; require VIEWS_PATH . '/portfolio-tool.php'; }
 
     /** Public dashboard mock tailored to the operating model of each demo. */
     public function industryDashboard($slug)
