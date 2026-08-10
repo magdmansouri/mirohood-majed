@@ -19,6 +19,23 @@ class DemoRenderer
     public function caseStudy($slug) { if (!$this->isDemo($slug)) { http_response_code(404); return; } $demo=$this->demos[$slug]; require VIEWS_PATH . '/case-study.php'; }
     public function tool($tool) { $demos=$this->demos; require VIEWS_PATH . '/portfolio-tool.php'; }
 
+    public function englishDemo($slug) {
+        if (!$this->isDemo($slug)) { http_response_code(404); return; }
+        $demo = $this->demos[$slug];
+        $english = [
+            'shop'=>['name'=>'Atrium','type'=>'Fashion commerce','title'=>'A store built for effortless choices.','copy'=>'A focused shopping experience with product discovery, cart flow, and a polished checkout path.'],
+            'cafe'=>['name'=>'Cafe Roberoo','type'=>'Cafe & hospitality','title'=>'A pause worth making time for.','copy'=>'A warm menu, table reservations, and a clear path from browsing to visiting.'],
+            'ticket'=>['name'=>'Rooidadino','type'=>'Events & ticketing','title'=>'Every good night starts with the right seat.','copy'=>'Event discovery, ticket selection, and seat picking without unnecessary steps.'],
+            'company'=>['name'=>'Noghtechno','type'=>'Company website','title'=>'A clearer way to present serious work.','copy'=>'Services, proof, and conversion-focused content for growing teams.'],
+            'restaurant'=>['name'=>'Gandom','type'=>'Restaurant','title'=>'A menu that makes the evening easier.','copy'=>'Food discovery, reservations, and the details guests need before they arrive.'],
+            'realestate'=>['name'=>'Khanehro','type'=>'Real estate','title'=>'Find a place that feels right.','copy'=>'Property filters, clear details, and a direct line to the right advisor.'],
+            'hotel'=>['name'=>'Hotel Aban','type'=>'Hospitality','title'=>'A calm stay starts before check-in.','copy'=>'Room discovery, dates, and a reservation journey designed around confidence.'],
+            'medical'=>['name'=>'Markaz Sepid','type'=>'Medical center','title'=>'Care, on a schedule that works for you.','copy'=>'Specialists, available times, and a reassuring appointment flow.'],
+        ];
+        $content = $english[$slug];
+        require VIEWS_PATH . '/english-demo.php';
+    }
+
     /** Public dashboard mock tailored to the operating model of each demo. */
     public function industryDashboard($slug)
     {

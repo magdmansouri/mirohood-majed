@@ -273,8 +273,16 @@ try {
         exit;
     }
 
-    // Public portfolio conversion tools and English showcase.
-    if (in_array($path, ['start-project', 'demo-customizer', 'about-me', 'en'], true)) {
+    // English portfolio and industry demo routes.
+    if ($path === 'en' || preg_match('#^en/(shop|cafe|ticket|company|restaurant|realestate|hotel|medical)$#', $path, $englishMatch)) {
+        require_once BASE_PATH . '/includes/DemoRenderer.php';
+        $renderer = new DemoRenderer();
+        if ($path === 'en') { $renderer->tool('en'); } else { $renderer->englishDemo($englishMatch[1]); }
+        exit;
+    }
+
+    // Public portfolio conversion tools.
+    if (in_array($path, ['start-project', 'demo-customizer', 'about-me'], true)) {
         require_once BASE_PATH . '/includes/DemoRenderer.php';
         (new DemoRenderer())->tool($path);
         exit;
