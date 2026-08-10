@@ -282,7 +282,7 @@ try {
     }
 
     // Public portfolio conversion tools.
-    if (in_array($path, ['start-project', 'demo-customizer', 'about-me'], true)) {
+    if (in_array($path, ['start-project', 'demo-customizer', 'about-me', 'services', 'process', 'website-finder'], true)) {
         require_once BASE_PATH . '/includes/DemoRenderer.php';
         (new DemoRenderer())->tool($path);
         exit;
